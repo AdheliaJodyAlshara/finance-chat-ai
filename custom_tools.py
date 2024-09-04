@@ -1,18 +1,13 @@
-import os
-import pandas as pd
+import tempfile
+import shutil
+from typing import List
 from langchain.agents import Tool
 from langchain_community.tools.tavily_search.tool import TavilySearchResults
 from langchain_community.utilities.tavily_search import TavilySearchAPIWrapper
-from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
-from langchain_openai import OpenAI
-# from main import data_input
+from langchain_openai import ChatOpenAI
 
-url = os.getenv("CSV_URL")
-file_id=url.split('/')[-2]
-dwn_url='https://drive.google.com/uc?id=' + file_id
-data_input = pd.read_csv(dwn_url)
-
+from config import data_input, llm
 
 # def searchFromInternet(query: str):
 #     retriever = TavilySearchAPIRetriever(k=10, search_depth="advanced")
@@ -31,17 +26,23 @@ def default_tools():
     """
     return answer
 
-def chart_generator(query : str):
-    langchain_llm = OpenAI(openai_api_key=os.getenv("OPENAI_API_KEY"))
-    df = SmartDataframe(data_input, config={"llm": langchain_llm})
+def chart_generator(user_query : str) -> str:
+    df = SmartDataframe(data_input, config={"llm": llm})
+    chart_path = df.chat(user_query)
 
-    response = df.chat(query)
+    # file_ = open(chart_path, "rb")
+    # contents = file_.read()
+    # data_url = base64.b64encode(contents).decode("utf-8")
+    # file_.close()
 
+    response = f"""The chart has been generated.
+    
+    Please strictly add this HTML command in your response to show the chart image to the user:
+    <img src="{chart_path}" alt="chart image">"""
     return response
 
 
-
-def initialize_tools():
+def initialize_tools() -> List[Tool]:
     search_tavily = TavilySearchAPIWrapper()
     tavily_tool = TavilySearchResults(api_wrapper=search_tavily)
 
@@ -51,11 +52,10 @@ def initialize_tools():
             func=tavily_tool.run,
             description="useful to get additional information from internet."
         ),
-
         Tool(
             name="ChartGenerator",
             func=chart_generator,
-            description="useful to get chart from user question."
+            description="useful to create chart based on user question."
         )
     ]
 
