@@ -35,15 +35,17 @@ PT Surya Timur Alam Raya Asset Management (STAR AM) is a company engaged in asse
 - Selling & Marketing Expenses: These are costs incurred to promote and sell products or services. They include advertising, promotional activities, and other related activities aimed at increasing sales and market presence.
 - General and Administrative Expenses: These are the overhead costs necessary for the overall operation of the business but not directly tied to production or sales. This business metric includes expenses like office rent, utilities, office supplies, legal and accounting fees, insurance, and executive salaries, and other related general & admin activities. These are essential to keeping the company running smoothly but do not contribute directly to revenue generation.
 - Technology Cost: This business metric encompasses expenses related to the acquisition, maintenance, and operation of technology systems. It includes costs for software, hardware, IT support, data storage, cloud services, cybersecurity, and any other technology-related expenses that enable the business to operate efficiently and securely.
+- Revenue - Operational: refers to the income generated from the company's core business activities related to managing client assets. This subcategory of operational revenue typically includes Management Fees: Fees charged to clients for managing their portfolios or investment funds. These fees are usually calculated as a percentage of the assets under management (AUM).
 
 Here the steps for you to summarize and give insight about the STAR AM finance report data:
 - Step 1 : Step by step analyze provided finance data trends in saldo_akhir column within years over months from each business metric and description of chart of account. You don't need to use the tools for this step.
-- Step 2 : Enhance your analysis from Step 1 by gathering additional insights from the internet to strengthen your summary. You are limited to a maximum of three internet searches. If you find the information you need before reaching three searches, you can proceed to the next step without completing all three searches. But if the question involves creating a chart, you can use the Chart Generator tool.
+- Step 2 : Enhance your analysis from Step 1 by gathering additional insights from the internet to strengthen your summary. You are limited to a maximum of three internet searches. If you find the information you need before reaching three searches, you can proceed to the next step without completing all three searches. But if the question involves creating a chart, you can use the Chart Generator tool by passing the user question without paraphrasing for creating chart.
 - Step 3 : Summarize the findings and provide insights based on your analysis from Step 1 and the additional information from Step 2. if there is a description name (chart of account) that is found to have increased or decreased make it in the list order format (-). Ensure your final answer integrates the data trends with insights from the internet searches or chart generator.
+- Step 4 : In the final output, You should include all reference data & links to back up your research; You should include all reference data.
 
 If the question is a follow-up question or does not relate to the provided finance data, then here the steps for you:
 - Step 1 : Get the information from the internet to get answer from the user question. REMEMBER YOU ARE ONLY PERMITTED TO SEARCH FROM THE INTERNET 3 TIMES OR LESS! If you feel enough with your research from the internet less than 3 times, you can immediately move on to the next step.
-- Step 2 : From step 1, provide the final answer.
+- Step 2 : From step 1, provide the final answer. In the final output, You should include all reference data & links to back up your research; You should include all reference data.
 '''
 
 data_string = f'''Finance Report Data of STAR AM Business Unit: 
@@ -74,9 +76,10 @@ Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can be repeated only 3 times)
 Thought: I now know the final answer
-Final Answer: If the question directly involves analyzing the finance report data provided. Final Answer Format:
+Final Answer: If the question directly involves analyzing the finance report data provided. 
 
-<Business Metric>
+Provide your final answer using the following output format for each business metrics:
+<Business Metrics>
 - Summarization: <Your Summarization as a paragraph> 
 - Insight: <Your Insight as a paragraph>
 

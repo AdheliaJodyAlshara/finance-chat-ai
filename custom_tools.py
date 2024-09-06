@@ -6,6 +6,7 @@ from langchain_community.tools.tavily_search.tool import TavilySearchResults
 from langchain_community.utilities.tavily_search import TavilySearchAPIWrapper
 from pandasai import SmartDataframe
 from langchain_openai import ChatOpenAI
+# from typing import Annotated
 
 from config import data_input, llm
 
@@ -26,9 +27,10 @@ def default_tools():
     """
     return answer
 
-def chart_generator(user_query : str) -> str:
+# def chart_generator(user_question : Annotated[str, "The original user question without paraphrasing for creating chart"]) -> str:
+def chart_generator(user_question : str) -> str:
     df = SmartDataframe(data_input, config={"llm": llm})
-    chart_path = df.chat(user_query)
+    chart_path = df.chat(user_question)
 
     # file_ = open(chart_path, "rb")
     # contents = file_.read()
@@ -55,7 +57,7 @@ def initialize_tools() -> List[Tool]:
         Tool(
             name="ChartGenerator",
             func=chart_generator,
-            description="useful to create chart based on user question."
+            description="useful to create chart based on user question. Please address the entire user question directly without any paraphrasing."
         )
     ]
 

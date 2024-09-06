@@ -1,6 +1,6 @@
 .venv/
 __pycache__/
 test.py
+main.py
 pandasai.log
 cache
-main.py
