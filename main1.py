@@ -38,6 +38,8 @@ PT Surya Timur Alam Raya Asset Management (STAR AM) is a company engaged in asse
 - Revenue - Operational: refers to the income generated from the company's core business activities related to managing client assets. This subcategory of operational revenue typically includes Management Fees: Fees charged to clients for managing their portfolios or investment funds. These fees are usually calculated as a percentage of the assets under management (AUM).
 
 Note that all of the value in 'mtd_value' and 'ytd_value' nominal are in IDR.
+- mtd_value: represents month to date value. mtd_value in each month represents the monthly transactions in starting from the beginning of month until the end of month.
+- ytd_value: represents year to date value. ytd_value in each month represents cumulatives starting from January to the current month.
 
 Here the steps for you to summarize and give insight about the STAR AM finance report data:
 - Step 1 : Step by step analyze provided finance data trends in mtd_value or ytd_value column as user request within years over months from each business metric and description of chart of account. Always show in numeric number instead in scientific number format. You don't need to use the tools for this step.
@@ -125,12 +127,27 @@ agent_executor = AgentExecutor.from_agent_and_tools(
 )
 
 if __name__ == "__main__":
+
     # Setup the Streamlit interface
     st.title('Q&A AI Finance')
+
+    # # Setup the Streamlit interface
+    # col1, col2 = st.columns([1, 22])
+    # # Display the icon in the first column
+    # with col1:
+    #     st.image("Logo_SC.png", width=100)  # Adjust the width as needed
+
+    # # Display the title in the second column
+    # with col2:
+    #     st.title("Dashboard Q&A Assistant")
+    
+    # st.subheader("Hi, I am Finance Dashboard Assistant. What can I do for you?", divider="blue")
 
     # Initialize session state for maintaining conversation history
     if 'messages' not in st.session_state:
         st.session_state.messages = []
+    # if "example_query" not in st.session_state:
+    #     st.session_state.example_query = None
 
     # Display the conversation history
     for message in st.session_state.messages:
@@ -142,6 +159,32 @@ if __name__ == "__main__":
                 st.image(image_path)
             else:
                 st.markdown(message['content'])
+    
+    # if len(st.session_state.messages) == 0:
+    #     # Create three columns for the example buttons
+    #     example_col1, example_col2, example_col3= st.columns(3)
+
+    #     # Add buttons to each column
+    #     with example_col1:
+    #         example_query1 = "Could you provide the breakdown of Manpower Cost using ytd value August 2024?"
+    #         if st.button(example_query1):
+    #             st.session_state.example_query = example_query1
+    #             st.session_state.messages.append({"role": "user", "content": example_query1})
+    #             st.rerun()
+
+    #     with example_col2:
+    #         example_query2 = "Please calculate manpower productivity ytd August 2024"
+    #         if st.button(example_query2):
+    #             st.session_state.example_query = example_query2
+    #             st.session_state.messages.append({"role": "user", "content": example_query2})
+    #             st.rerun()
+
+    #     with example_col3:
+    #         example_query3 = "Please create chart manpower cost using ytd value in 2024, group by month and year. and month axis in month name"
+    #         if st.button(example_query3):
+    #             st.session_state.example_query = example_query3
+    #             st.session_state.messages.append({"role": "user", "content": example_query3})
+    #             st.rerun()
 
     # User inputs their question
     user_question = st.chat_input("Enter your question about the finance data...")
@@ -176,3 +219,39 @@ if __name__ == "__main__":
                 response = "I'm sorry I can't process your query right now. Please try again."
                 st.write_stream(stream_data(response))
             st.session_state.messages.append({"role": "assistant", "content": response})
+
+    # # Button to process the question
+    # if user_question or st.session_state.example_query:
+    #     if st.session_state.example_query:
+    #         user_question = st.session_state.example_query
+    #         st.session_state.example_query = None
+    #     else:
+    #         # Append user's question to the session state
+    #         st.session_state.messages.append({"role": "user", "content": user_question})
+            
+    #         with st.chat_message("user"):
+    #             st.markdown(user_question)
+
+    #     # Run the agent with the formulated prompt
+    #     with st.spinner('Processing...'):
+    #         try:
+    #             response = agent_executor.run(human_input=user_question)
+    #         except:
+    #             response = "I'm sorry I can't process your query right now. Please try again."
+
+    #     # Append AI response to the session state
+    #     try:
+    #         with st.chat_message("assistant"):
+    #             if "<img" in response:
+    #                 image_path = re.search(r'src="([^"]*)"', response).group(1)
+    #                 new_response = re.sub(r'<img src="[^"]*" alt="[^"]*">', '', response)
+    #                 st.write_stream(stream_data(new_response))
+    #                 st.image(image_path)
+    #             else:
+    #                 st.write_stream(stream_data(response))
+    #         st.session_state.messages.append({"role": "assistant", "content": response})
+    #     except:
+    #         with st.chat_message("assistant"):
+    #             response = "I'm sorry I can't process your query right now. Please try again."
+    #             st.write_stream(stream_data(response))
+    #         st.session_state.messages.append({"role": "assistant", "content": response})
