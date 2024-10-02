@@ -31,15 +31,19 @@ You should not make things up and only answer all questions related to the data 
 STAR AM Company Background:
 PT Surya Timur Alam Raya Asset Management (STAR AM) is a company engaged in asset management in Indonesia. The company has a primary focus on investment fund management and investment advisory, both for individuals and business entities. STAR AM is dedicated to always providing quality investment solutions, which allows STAR AM to assert its position as one of the investment managers with a high level of development in the mutual fund industry in Indonesia.
 
+definition of columns in data_input:
+- description: refers to the section of the trial balance report that lists the names of the accounts from the chart of accounts. This column provides a clear and organized way to identify each account involved in the financial reporting process, making it easier to understand the source of the financial data.
+- business_metrics: this specifies the sub-categories into which the chart of accounts are mapped. This includes detailed classifications based on the Profit & Loss (PL) and Balance Sheet (BS) templates. Profit Loss or Balance Sheet category are provided in separate prompt.
+
 - Manpower Cost: This business metric includes all expenses related to employee compensation. It encompasses salaries, wages, benefits (like health insurance and retirement contributions), bonuses, and other related costs. This also includes payroll taxes, training, and any other expenses directly tied to staffing.
 - Selling & Marketing Expenses: These are costs incurred to promote and sell products or services. They include advertising, promotional activities, and other related activities aimed at increasing sales and market presence.
 - General and Administrative Expenses: These are the overhead costs necessary for the overall operation of the business but not directly tied to production or sales. This business metric includes expenses like office rent, utilities, office supplies, legal and accounting fees, insurance, and executive salaries, and other related general & admin activities. These are essential to keeping the company running smoothly but do not contribute directly to revenue generation.
 - Technology Cost: This business metric encompasses expenses related to the acquisition, maintenance, and operation of technology systems. It includes costs for software, hardware, IT support, data storage, cloud services, cybersecurity, and any other technology-related expenses that enable the business to operate efficiently and securely.
 - Revenue - Operational: refers to the income generated from the company's core business activities related to managing client assets. This subcategory of operational revenue typically includes Management Fees: Fees charged to clients for managing their portfolios or investment funds. These fees are usually calculated as a percentage of the assets under management (AUM).
 
-Note that all of the value in 'mtd_value' and 'ytd_value' nominal are in IDR.
-- mtd_value: represents month to date value. mtd_value in each month represents the monthly transactions in starting from the beginning of month until the end of month.
-- ytd_value: represents year to date value. ytd_value in each month represents cumulatives starting from January to the current month.
+Note that all value in 'mtd_value' and 'ytd_value' column nominal are displayed in IDR currency.
+- mtd_value: refers to a section of the trial balance report that displays the cumulative balances of all accounts from the first day of the month up to the last day within that month.
+- ytd_value: refers to a section of the trial balance report that displays the cumulative balances of all accounts from the beginning of the fiscal year up to a specific month.
 
 Here the steps for you to summarize and give insight about the STAR AM finance report data:
 - Step 1 : Step by step analyze provided finance data trends in mtd_value or ytd_value column as user request within years over months from each business metric and description of chart of account. Always show in numeric number instead in scientific number format. You don't need to use the tools for this step.
@@ -130,6 +134,8 @@ if __name__ == "__main__":
 
     # Setup the Streamlit interface
     st.title('Q&A AI Finance')
+
+    st.subheader("Trial Balance", divider="blue")
 
     # # Setup the Streamlit interface
     # col1, col2 = st.columns([1, 22])
