@@ -33,27 +33,30 @@ PT Surya Timur Alam Raya Asset Management (STAR AM) is a company engaged in asse
 
 definition of columns in data_input:
 - description: refers to the section of the trial balance report that lists the names of the accounts from the chart of accounts. This column provides a clear and organized way to identify each account involved in the financial reporting process, making it easier to understand the source of the financial data.
-- business_metrics: this specifies the sub-categories into which the chart of accounts are mapped. This includes detailed classifications based on the Profit & Loss (PL) and Balance Sheet (BS) templates. Profit Loss or Balance Sheet category are provided in separate prompt.
+- business_metrics: this specifies the sub-categories into which the chart of accounts are mapped. the mapping relationship is one to many where one business_metrics value contains many chart of accounts from description column. to show total within one business_metrics, all description column mapped to one business_metrics must be calculated using SUM function. This includes detailed classifications based on the Profit & Loss (PL) and Balance Sheet (BS) templates. Profit Loss or Balance Sheet category are provided in separate prompt.
 
 - Manpower Cost: This business metric includes all expenses related to employee compensation. It encompasses salaries, wages, benefits (like health insurance and retirement contributions), bonuses, and other related costs. This also includes payroll taxes, training, and any other expenses directly tied to staffing.
 - Selling & Marketing Expenses: These are costs incurred to promote and sell products or services. They include advertising, promotional activities, and other related activities aimed at increasing sales and market presence.
 - General and Administrative Expenses: These are the overhead costs necessary for the overall operation of the business but not directly tied to production or sales. This business metric includes expenses like office rent, utilities, office supplies, legal and accounting fees, insurance, and executive salaries, and other related general & admin activities. These are essential to keeping the company running smoothly but do not contribute directly to revenue generation.
 - Technology Cost: This business metric encompasses expenses related to the acquisition, maintenance, and operation of technology systems. It includes costs for software, hardware, IT support, data storage, cloud services, cybersecurity, and any other technology-related expenses that enable the business to operate efficiently and securely.
-- Revenue - Operational: refers to the income generated from the company's core business activities related to managing client assets. This subcategory of operational revenue typically includes Management Fees: Fees charged to clients for managing their portfolios or investment funds. These fees are usually calculated as a percentage of the assets under management (AUM).
+- Revenue Operational: refers to the income generated from the company's core business activities related to managing client assets. This subcategory of operational revenue typically includes Management Fees: Fees charged to clients for managing their portfolios or investment funds. These fees are usually calculated as a percentage of the assets under management (AUM).
+- Direct Cost: expenses that are directly attributable to the core activities of managing assets and investments, particularly related to specific funds or services. These costs are incurred as a result of providing investment management services and are usually tied to the operations, services, and transactions involving the assets under management.
 
 Note that all value in 'mtd_value' and 'ytd_value' column nominal are displayed in IDR currency.
 - mtd_value: refers to a section of the trial balance report that displays the cumulative balances of all accounts from the first day of the month up to the last day within that month.
 - ytd_value: refers to a section of the trial balance report that displays the cumulative balances of all accounts from the beginning of the fiscal year up to a specific month.
 
+Note: Please show a detailed step-by-step explanation for the calculations, not just the final result. 
+
 Here the steps for you to summarize and give insight about the STAR AM finance report data:
-- Step 1 : Step by step analyze provided finance data trends in mtd_value or ytd_value column as user request within years over months from each business metric and description of chart of account. Always show in numeric number instead in scientific number format. You don't need to use the tools for this step.
+- Step 1 : Step by step analyze provided finance data trends in mtd_value or ytd_value column as user request within years over months from each business metric and description of chart of account. Please show a detailed step-by-step explanation for the calculations, not just the final result in the final answer. Always show in numeric number instead in scientific number format. You don't need to use the tools for this step. 
 - Step 2 : Enhance your analysis from Step 1 by gathering additional insights from the internet to strengthen your summary. You are limited to a maximum of three internet searches. If you find the information you need before reaching three searches, you can proceed to the next step without completing all three searches. But if the question involves creating a chart, you can use the Chart Generator tool by passing the user question without paraphrasing for creating chart.
 - Step 3 : Summarize the findings and provide insights based on your analysis from Step 1 and the additional information from Step 2. Ensure your final answer integrates the data trends with insights from the internet searches or chart generator.
 - Step 4 : In the final output, You should include all reference data & links to back up your research; You should include all reference data.
 
 If the question is a follow-up question or does not relate to the provided finance data, then here the steps for you:
 - Step 1 : Get the information from the internet to get answer from the user question. REMEMBER YOU ARE ONLY PERMITTED TO SEARCH FROM THE INTERNET 3 TIMES OR LESS! If you feel enough with your research from the internet less than 3 times, you can immediately move on to the next step.
-- Step 2 : From step 1, provide the final answer. In the final output, You should include all reference data & links to back up your research; You should include all reference data.
+- Step 2 : From step 1, provide the final answer. In the final output, You should include all reference data & links to back up your research; You should include all reference data. If you do any calculations, please always show the calculations in your final answer.
 '''
 
 data_string = f'''Finance Report Data of STAR AM Business Unit: 
@@ -93,7 +96,7 @@ Provide your final answer using the following output format for each business me
 
 
 If the question is a follow-up or does not relate to the provided finance data:
-Final Answer: <Directly provide the summarized answer without the detailed format>
+Final Answer: <Directly provide the summarized answer without the detailed format. If you do any calculations, please always show the step by step calculations in your final answer>
 """
 
 # Create the prompt for the ZeroShotAgent
