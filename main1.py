@@ -8,7 +8,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain_openai import ChatOpenAI
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
-from custom_tools import initialize_tools, data_input
+from custom_tools import initialize_tools, get_data
 from callbacks import StreamHandler, stream_data
 from config import llm
 
@@ -42,14 +42,16 @@ definition of columns in data_input:
 - Revenue Operational: refers to the income generated from the company's core business activities related to managing client assets. This subcategory of operational revenue typically includes Management Fees: Fees charged to clients for managing their portfolios or investment funds. These fees are usually calculated as a percentage of the assets under management (AUM).
 - Direct Cost: expenses that are directly attributable to the core activities of managing assets and investments, particularly related to specific funds or services. These costs are incurred as a result of providing investment management services and are usually tied to the operations, services, and transactions involving the assets under management.
 
+- EBITDA refers to Earnings Before Interest, Tax, and Depreciation. EBITDA is calculated based on below formula in business_metrics Value: EBITDA = Total Revenue - Direct Cost - Manpower Cost - Selling & Marketing Expense - General and Administrative Expense - Technology Cost
+
 Note that all value in 'mtd_value' and 'ytd_value' column nominal are displayed in IDR currency.
 - mtd_value: refers to a section of the trial balance report that displays the cumulative balances of all accounts from the first day of the month up to the last day within that month.
 - ytd_value: refers to a section of the trial balance report that displays the cumulative balances of all accounts from the beginning of the fiscal year up to a specific month.
 
-Note: Please show a detailed step-by-step explanation for the calculations, not just the final result. 
+Note: please always show the break down of the calculation step-by-step using values from the data provided in your final answer 
 
 Here the steps for you to summarize and give insight about the STAR AM finance report data:
-- Step 1 : Step by step analyze provided finance data trends in mtd_value or ytd_value column as user request within years over months from each business metric and description of chart of account. Please show a detailed step-by-step explanation for the calculations, not just the final result in the final answer. Always show in numeric number instead in scientific number format. You don't need to use the tools for this step. 
+- Step 1 : Step by step analyze provided finance data trends in mtd_value or ytd_value column as user request within years over months from each business metric and description of chart of account. If you do any calculations, please always show the break down of the calculation step-by-step using values from the data provided in your final answer. Always show in numeric number instead in scientific number format. You don't need to use the tools for this step. 
 - Step 2 : Enhance your analysis from Step 1 by gathering additional insights from the internet to strengthen your summary. You are limited to a maximum of three internet searches. If you find the information you need before reaching three searches, you can proceed to the next step without completing all three searches. But if the question involves creating a chart, you can use the Chart Generator tool by passing the user question without paraphrasing for creating chart.
 - Step 3 : Summarize the findings and provide insights based on your analysis from Step 1 and the additional information from Step 2. Ensure your final answer integrates the data trends with insights from the internet searches or chart generator.
 - Step 4 : In the final output, You should include all reference data & links to back up your research; You should include all reference data.
@@ -59,14 +61,12 @@ If the question is a follow-up question or does not relate to the provided finan
 - Step 2 : From step 1, provide the final answer. In the final output, You should include all reference data & links to back up your research; You should include all reference data. If you do any calculations, please always show the calculations in your final answer.
 '''
 
-data_string = f'''Finance Report Data of STAR AM Business Unit: 
+suffix = '''Finance Report Data of STAR AM Business Unit (if the data only contains 1 row of data, then it's most likely the answer to the user's question): 
 ```
-{data_input.to_string()}
+{data_input}
 ```
 
-'''
-
-suffix = data_string + '''Your past conversation with human:
+Your past conversation with human:
 ```
 {chat_history}
 ```
@@ -87,16 +87,15 @@ Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can be repeated only 3 times)
 Thought: I now know the final answer
-Final Answer: If the question directly involves analyzing the finance report data provided. 
+Final Answer: If the question directly involves analyzing the finance report data provided. Please always show the break down of the calculation step-by-step using values from the data provided in your final answer
 
-Provide your final answer using the following output format for each business metrics:
+Always provide your final answer using the following output format for each business metrics:
 <Business Metrics>
-- Summarization: <Your Summarization as a paragraph> 
-- Insight: <Your Insight as a paragraph>
-
+- Summarization: <Your Summarization as a paragraph with the calculations.>
+- Insight: <Your Insight as a paragraph.>
 
 If the question is a follow-up or does not relate to the provided finance data:
-Final Answer: <Directly provide the summarized answer without the detailed format. If you do any calculations, please always show the step by step calculations in your final answer>
+Final Answer: <Directly provide the summarized answer without the detailed format.>
 """
 
 # Create the prompt for the ZeroShotAgent
@@ -109,7 +108,7 @@ prompt = ZeroShotAgent.create_prompt(
 
 )
 
-memory = ConversationBufferMemory(memory_key="chat_history")
+memory = ConversationBufferMemory(memory_key="chat_history", input_key="human_input")
 
 # stream_handler = StreamHandler(st.empty())
 
@@ -149,8 +148,6 @@ if __name__ == "__main__":
     # # Display the title in the second column
     # with col2:
     #     st.title("Dashboard Q&A Assistant")
-    
-    # st.subheader("Hi, I am Finance Dashboard Assistant. What can I do for you?", divider="blue")
 
     # Initialize session state for maintaining conversation history
     if 'messages' not in st.session_state:
@@ -198,7 +195,7 @@ if __name__ == "__main__":
     # User inputs their question
     user_question = st.chat_input("Enter your question about the finance data...")
 
-    # Button to process the question
+     # Button to process the question
     if user_question:
         # Append user's question to the session state
         st.session_state.messages.append({"role": "user", "content": user_question})
@@ -208,7 +205,12 @@ if __name__ == "__main__":
         # Run the agent with the formulated prompt
         with st.spinner('Processing...'):
             try:
-                response = agent_executor.run(human_input=user_question)
+                _, data_input = get_data(user_question=user_question)
+                print(data_input)
+                response = agent_executor.run(
+                    data_input=data_input,
+                    human_input=user_question
+                )
             except:
                 response = "I'm sorry I can't process your query right now. Please try again."
 
